@@ -1,27 +1,20 @@
 void setup() {
 
   Serial.begin(9600);
-
+  pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop() {
 
-  int password;
-
-  // read input once
-  while(!Serial.available())
-    ;
-
-  while(Serial.available()){
-
-    int newDigit = Serial.read();
-    
-    // Shift all digits left, add new last digit
-    password = (password*10) + newDigit;
+  String input;
+  if (Serial.available()) {
+    input = Serial.readStringUntil('\n');
   }
-
-  // Send to LED:
-  Serial.print("Password is: ");
-  Serial.println(password);
+  for (int i = 0, x = input.length(); i < x; i++) {
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay((input[i] - '0') * 1000);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(500);
+  } 
 
 }
